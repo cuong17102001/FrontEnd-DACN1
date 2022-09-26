@@ -29,6 +29,7 @@ export const ProfileCard = () => {
             </div>
             <hr/>
         </div>
+        <span>My profile</span>
     </div>
   )
 }
