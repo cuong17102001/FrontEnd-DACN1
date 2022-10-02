@@ -45,7 +45,7 @@ const PostShare = () => {
                         Share
                     </button>
                     <div style={{display:"none"}}>
-                        <input type="file" name='myFile' ref={imageRef} onChange={onChangeImage}/>
+                        <input type="file" accept='image/*' name='myFile' ref={imageRef} onChange={onChangeImage}/>
                     </div>
                 </div>
                 {image && (
