@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import './Posts.css'
-import { PostsData } from '../../data/PostsData'
+// import { PostsData } from '../../data/PostsData'
 import { Post } from '../Post/Post'
 import {useDispatch, useSelector} from 'react-redux'
 import { getTimelinePosts } from '../../actions/PostAction'
@@ -16,7 +16,7 @@ const Posts = () => {
 
   return (
     <div className='Posts'>
-      {posts.map((post , id) =>{
+      {posts && posts.map((post , id) =>{
         return <Post data={post} id={id}/>
       })}
     </div>
