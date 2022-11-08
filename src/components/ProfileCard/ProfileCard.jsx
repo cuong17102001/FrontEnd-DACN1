@@ -1,31 +1,37 @@
 import React from 'react'
-import Cover from '../../img/cover.jpg'
-import Profile from '../../img/profileImg.jpg'
+import { useSelector } from 'react-redux'
+import Cover from '../../img/default.jpg'
+import Profile from '../../img/default.png'
 import './ProfileCard.css'
+import {Link} from 'react-router-dom'
 
 export const ProfileCard = () => {
 
-    const ProfilePage = true;
+    const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER
+    const { user } = useSelector(state => state.authReducer.authData)
+    
+console.log(user);
+    const ProfilePage = false;
   return (
     <div className="ProfileCard">
         <div className="ProfileImages">
-            <img src={Cover} alt='' />
-            <img src={Profile} alt='' />
+            <img src={user.coverPicture ? publicFolder + user.coverPicture : Cover} alt='' />
+            <img src={user.profilePicture ? publicFolder + user.profilePicture : Profile} alt='' />
         </div>
         <div className="ProfileName">
-            <span>sadfsadf</span>
-            <span>xcvzxcvzxcvxzcv</span>
+            <span>{user.firstname} {user.lastname}</span>
+            <span>{user.workAt ? user.workAt : "Write about yourself"}</span>
         </div>
         <div className="FollowStatus">
             <hr/>
             <div>
                 <div className='follow'>
-                    <span>3,123</span>
+                    <span>{user.following.length}</span>
                     <span>Followings</span>
                 </div>
                 <div className='vl'></div>
                 <div className='follow'>
-                    <span>548</span>
+                    <span>{user.followers.length}</span>
                     <span>Followers</span>
                 </div>
 
@@ -43,7 +49,9 @@ export const ProfileCard = () => {
             </div>
             <hr/>
         </div>
-        {ProfilePage ? "" : <span>My profile</span>}
+        {ProfilePage ? "" : <span>
+            <Link style={{textDecoration : "none" , color : "inherit"}} to={`/profile/${user._id}`}> My profile</Link>
+            </span>}
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { logIn, signUp } from '../../actions/AuthAction'
 export const Auth = () => {
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.authReducer.loading)
-    const [isSignUp, setIsSignUp] = useState(true)
+    const [isSignUp, setIsSignUp] = useState(false)
 
     const [data, setData] = useState({
         firstname: "",
@@ -100,7 +100,6 @@ export const Auth = () => {
                     <button type='submit' className='button infoButton'>{loading ? "Loading..." : isSignUp ? "Sign Up" : "Log In"}</button>
                 </form>
             </div>
-
         </div>
     )
 }

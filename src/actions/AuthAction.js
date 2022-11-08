@@ -18,6 +18,23 @@ export const logIn = (formData)=> async (dispatch) =>{
     }
 } 
 
+export const logOut = ()=> async (dispatch) =>{
+    dispatch({
+        type : "AUTH_START"
+    })
+    try {
+        dispatch({
+            type : "AUTH_SUCCESS",
+            data : null
+        })
+    } catch (error) {
+        console.log(error);
+        dispatch({
+            type : "AUTH_FAIL"
+        })
+    }
+}
+
 export const signUp = (formData)=> async (dispatch) =>{
     dispatch({
         type : "AUTH_START"
