@@ -8,7 +8,7 @@ export const Home = () => {
   return (
     <div className='Home'>
         <ProfileSide />
-        <PostSide/>
+        <PostSide location="homePage"/>
         <RightSide/>
     </div>
   )

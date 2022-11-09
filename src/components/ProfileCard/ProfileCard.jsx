@@ -3,15 +3,17 @@ import { useSelector } from 'react-redux'
 import Cover from '../../img/default.jpg'
 import Profile from '../../img/default.png'
 import './ProfileCard.css'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 
-export const ProfileCard = () => {
+export const ProfileCard = ({location}) => {
 
     const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER
     const { user } = useSelector(state => state.authReducer.authData)
+    const {id} = useParams()
+
     
-console.log(user);
-    const ProfilePage = false;
+    
+
   return (
     <div className="ProfileCard">
         <div className="ProfileImages">
@@ -26,16 +28,16 @@ console.log(user);
             <hr/>
             <div>
                 <div className='follow'>
-                    <span>{user.following.length}</span>
+                    <span>{user.following ? user.following.length : "0"}</span>
                     <span>Followings</span>
                 </div>
                 <div className='vl'></div>
                 <div className='follow'>
-                    <span>{user.followers.length}</span>
+                    <span>{user.followers ? user.followers.length : "0"}</span>
                     <span>Followers</span>
                 </div>
 
-                {ProfilePage && (
+                {location === "profilePage" && (
                    <>
                     <div className='vl'>
 
@@ -49,7 +51,7 @@ console.log(user);
             </div>
             <hr/>
         </div>
-        {ProfilePage ? "" : <span>
+        {location === "profilePage" ? "" : <span>
             <Link style={{textDecoration : "none" , color : "inherit"}} to={`/profile/${user._id}`}> My profile</Link>
             </span>}
     </div>

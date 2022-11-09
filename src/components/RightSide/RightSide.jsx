@@ -9,6 +9,7 @@ import { TrendCard } from '../TrendCard/TrendCard'
 import ShareModal from '../ShareModal/ShareModal'
 import { useDispatch } from 'react-redux'
 import { logOut } from '../../actions/AuthAction'
+import { Link } from 'react-router-dom'
 
 export const RightSide = () => {
   const [modalOpened , setModalOpened] = useState(false);
@@ -19,10 +20,12 @@ export const RightSide = () => {
   return (
     <div className="RightSide">
       <div className="navIcons">
-        <img src={Home} alt="" onClick={handleLogOut}/>
+        <Link style={{width :"1.5rem" , height:"1.5rem"}} to="/home">
+        <img style={{width: "100%" , height:"100%"}} src={Home} alt=""/>
+        </Link>
         <UilSetting />
         <img src={Noti} alt="" />
-        <img src={Comment} alt="" />
+        <img src={Comment} alt="" onClick={handleLogOut}/>
       </div>
 
       <TrendCard />

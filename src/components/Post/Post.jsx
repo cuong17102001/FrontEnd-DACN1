@@ -17,8 +17,6 @@ export const Post = ({data}) => {
     likePost(data._id , user._id)
     liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1) 
   } 
-
-  console.log(data);
   return (
     <div className='Post'>
         <img src={data.image ? process.env.REACT_APP_PUBLIC_FOLDER + data.image : ""} alt="" />
