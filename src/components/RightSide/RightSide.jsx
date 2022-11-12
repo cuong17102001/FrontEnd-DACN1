@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import './RightSide.css'
 
 import Home from '../../img/home.png'
-import Noti from '../../img/noti.png'
-import Comment from '../../img/comment.png'
+import { UilMessage } from '@iconscout/react-unicons'
 import { UilSetting } from '@iconscout/react-unicons'
+import { UilSignout } from '@iconscout/react-unicons'
 import { TrendCard } from '../TrendCard/TrendCard'
 import ShareModal from '../ShareModal/ShareModal'
 import { useDispatch } from 'react-redux'
@@ -15,7 +15,9 @@ export const RightSide = () => {
   const [modalOpened , setModalOpened] = useState(false);
   const dispatch = useDispatch();
   const handleLogOut = ()=>{
-    dispatch(logOut())
+    if (window.confirm("You want to logout?")) {
+      dispatch(logOut())
+    }
   }
   return (
     <div className="RightSide">
@@ -23,9 +25,9 @@ export const RightSide = () => {
         <Link style={{width :"1.5rem" , height:"1.5rem"}} to="/home">
         <img style={{width: "100%" , height:"100%"}} src={Home} alt=""/>
         </Link>
-        <UilSetting />
-        <img src={Noti} alt="" />
-        <img src={Comment} alt="" onClick={handleLogOut}/>
+        <UilSetting style={{cursor:"pointer"}}/>
+        <UilMessage style={{cursor:"pointer"}}/>
+        <UilSignout style={{cursor:"pointer"}} onClick={handleLogOut}/>
       </div>
 
       <TrendCard />

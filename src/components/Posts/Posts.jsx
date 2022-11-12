@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import './Posts.css'
-// import { PostsData } from '../../data/PostsData'
 import { Post } from '../Post/Post'
 import {useDispatch, useSelector} from 'react-redux'
-import { getTimelinePosts } from '../../api/PostRequest'
-// import { getTimelinePosts } from '../../actions/PostAction'
 import axios from 'axios';
 import { useParams } from 'react-router-dom'
 
 const Posts = ({location}) => {
-  const dispatch = useDispatch()
   const {user} = useSelector((state) => state.authReducer.authData)
-  // const {posts , loading} = useSelector((state) => state.postReducer)
   const [posts , setPosts] = useState([])
 
   const {id} = useParams()
@@ -20,7 +15,7 @@ const Posts = ({location}) => {
 
 
   useEffect(()=>{
-    axios.get(`http://localhost:5000/post/${userIdPosts}/timeline`)
+    axios.get(process.env.REACT_APP_API_URL+`/post/${userIdPosts}/timeline`)
     .then(res => {
       const listPost = res.data;
       

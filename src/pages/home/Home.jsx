@@ -7,7 +7,7 @@ import { RightSide } from '../../components/RightSide/RightSide'
 export const Home = () => {
   return (
     <div className='Home'>
-        <ProfileSide />
+        <ProfileSide location="homePage"/>
         <PostSide location="homePage"/>
         <RightSide/>
     </div>

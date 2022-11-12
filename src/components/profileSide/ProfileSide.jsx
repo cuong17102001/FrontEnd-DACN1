@@ -4,11 +4,11 @@ import LogoSearch from '../LogoSearch/LogoSearch'
 import { ProfileCard } from '../ProfileCard/ProfileCard'
 import './ProfileSide.css'
 
-const ProfileSide = () => {
+const ProfileSide = ({location}) => {
   return (
     <div className='ProfileSide'>
       <LogoSearch/>
-      <ProfileCard />
+      <ProfileCard location={location}/>
       <FollowersCard />
     </div>
   )
