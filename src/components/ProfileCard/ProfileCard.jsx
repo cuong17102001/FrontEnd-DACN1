@@ -5,57 +5,40 @@ import Profile from '../../img/default.png'
 import './ProfileCard.css'
 import { Link, useParams } from 'react-router-dom'
 import axios from "axios"
+import userInfoStore from '../../store'
 
 export const ProfileCard = ({ location }) => {
 
     const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER
     const { user } = useSelector(state => state.authReducer.authData)
-    const { id } = useParams()
 
-    const [userProfile, setUserProfile] = useState({})
-    const [postUser, setPostUser] = useState({})
+    const otherUserInfor = userInfoStore((state) => state.otherUserInfor)
+    const userInfo = userInfoStore((state) => state.userInfo)
+    const posts = userInfoStore((state) => state.posts)
+    
 
-    useEffect(() => {
-
-        if (id) {
-            axios.get(process.env.REACT_APP_API_URL + `/user/${id}`)
-                .then(res => {
-                    setUserProfile(res.data)
-                })
-                .catch(error => console.log(error));
-            axios.get(process.env.REACT_APP_API_URL + `/post/${id}/timeline`)
-                .then(res => {
-                    setPostUser(res.data)
-                })
-                .catch(error => console.log(error)); 
-        } else {
-            axios.get(process.env.REACT_APP_API_URL + `/user/${user._id}`)
-                .then(res => {
-                    setUserProfile(res.data)
-                })
-                .catch(error => console.log(error));
-        }
-    }, [])
     return (
         <div className="ProfileCard">
             <div className="ProfileImages">
-                <img src={userProfile.coverPicture ? publicFolder + userProfile.coverPicture : Cover} alt='' />
-                <img src={userProfile.profilePicture ? publicFolder + userProfile.profilePicture : Profile} alt='' />
+                <img src={location === "homePage" ? userInfo.coverPicture ? publicFolder + userInfo.coverPicture : Cover:
+                    otherUserInfor.coverPicture ? publicFolder + otherUserInfor.coverPicture : Cover} alt='' />
+                <img src={location === "homePage" ? userInfo.profilePicture ? publicFolder + userInfo.profilePicture : Profile :
+                    otherUserInfor.profilePicture ? publicFolder + otherUserInfor.profilePicture : Profile} alt='' />
             </div>
             <div className="ProfileName">
-                <span>{userProfile.firstname} {userProfile.lastname}</span>
-                <span>{userProfile.workAt ? userProfile.workAt : "Write about yourself"}</span>
+                <span>{location === "homePage" ? userInfo.firstname : otherUserInfor.firstname} {location === "homePage" ? userInfo.lastname : otherUserInfor.lastname}</span>
+                <span>{location === "homePage" ? userInfo.workAt ? userInfo.workAt : "Write about yourself" : otherUserInfor.workAt ? otherUserInfor.workAt : "Write about yourself"}</span>
             </div>
             <div className="FollowStatus">
                 <hr />
                 <div>
                     <div className='follow'>
-                        <span>{userProfile.following ? userProfile.following.length : "0"}</span>
+                        <span>{location === "homePage" ? userInfo.following ? userInfo.following.length : "0" : otherUserInfor.following ? otherUserInfor.following.length : "0"}</span>
                         <span>Followings</span>
                     </div>
                     <div className='vl'></div>
                     <div className='follow'>
-                        <span>{userProfile.followers ? userProfile.followers.length : "0"}</span>
+                        <span>{location === "homePage" ? userInfo.followers ? userInfo.followers.length : "0" : otherUserInfor.followers ? otherUserInfor.followers.length : "0"}</span>
                         <span>Followers</span>
                     </div>
 
@@ -65,7 +48,7 @@ export const ProfileCard = ({ location }) => {
 
                             </div>
                             <div className="follow">
-                                <span>{postUser ? postUser.length - 1 : "0"}</span>
+                                <span>{posts ? posts.length : "0"}</span>
                                 <span>Posts</span>
                             </div>
                         </>

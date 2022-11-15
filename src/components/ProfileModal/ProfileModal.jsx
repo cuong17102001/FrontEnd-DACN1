@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './ProfileModal.css'
 import { Modal, useMantineTheme } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {uploadImage} from '../../actions/UploadAction'
 import { updateUser } from '../../actions/UserAction';
+import userInfoStore from '../../store';
 
 const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
     const theme = useMantineTheme();
@@ -15,7 +16,12 @@ const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
     const dispatch = useDispatch()
     const { id } = useParams()
     const { user } = useSelector((state) => state.authReducer.authData)
+    const otherUserInfor = userInfoStore((state) => state.otherUserInfor)
+    const setOtherUserInfo = userInfoStore((state) => state.setOtherUserInfo)
 
+    useEffect(()=>{
+        setFormData(otherUserInfor)
+    },[id])
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -30,10 +36,10 @@ const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
         }
     }
 
+    
     const handleSubmit = (e)=>{
         e.preventDefault();
         let UserData = formData
-        console.log(UserData);
         if (profileImage) {
             const data = new FormData()
             const fileName = Date.now() + profileImage.name
@@ -47,6 +53,7 @@ const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
                 console.log(error);
             }
         }
+        setOtherUserInfo(UserData)
         UserData.currentUserId = user._id
         dispatch(updateUser(id , UserData))
         setModalOpened(false)

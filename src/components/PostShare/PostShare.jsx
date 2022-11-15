@@ -8,12 +8,14 @@ import { UilSchedule } from "@iconscout/react-unicons"
 import { UilTimes } from "@iconscout/react-unicons"
 import { useDispatch, useSelector } from 'react-redux'
 import { uploadImage , uploadPost } from '../../actions/UploadAction'
+import userInfoStore from '../../store'
 
-const PostShare = () => {
+const PostShare = (props) => {
     const loading = useSelector((state) => state.postReducer.uploading)
     const [image , setImage] = useState(null)
     const {user} = useSelector((state) => state.authReducer.authData)
     const desc = useRef()
+
     const imageRef = useRef()
     const dispatch = useDispatch()
     const onChangeImage = (event)=>{
@@ -22,6 +24,7 @@ const PostShare = () => {
             setImage(img)
         }
     }
+
 
     const reset = () =>{
         setImage(null)

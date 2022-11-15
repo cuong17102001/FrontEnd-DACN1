@@ -3,26 +3,18 @@ import './InfoCard.css'
 import { UilPen } from '@iconscout/react-unicons'
 import ProfileModal from '../ProfileModal/ProfileModal';
 import { useParams } from "react-router-dom"
-import * as UserApi from "../../api/UserRequest"
-import axios from 'axios';
 import { useSelector } from 'react-redux'
+import userInfoStore from '../../store';
 
 export const InfoCard = () => {
 
     const [modalOpened, setModalOpened] = useState(false);
     const params = useParams();
-    const [profileUser, setProfileUser] = useState({})
     const { user } = useSelector((state) => state.authReducer.authData)
 
     const profileUserId = params.id
-
-    useEffect(() => {
-        axios.get(process.env.REACT_APP_API_URL + `/user/${profileUserId}`)
-            .then(res => {
-                setProfileUser(res.data)
-            })
-            .catch(error => console.log(error));
-    }, [profileUserId])
+    
+    const otherUserInfor = userInfoStore((state) => state.otherUserInfor)
 
     return (
         <div className="InfoCard">
@@ -40,25 +32,35 @@ export const InfoCard = () => {
                 <span>
                     <b>Status </b>
                 </span>
-                {profileUser.relationship ? (
-                    <span>{profileUser.relationship}</span>
+                {otherUserInfor.relationship ? (
+                    <span>{otherUserInfor.relationship}</span>
                 ) : ""}
 
             </div>
+
+            <div className="info">
+                <span>
+                    <b>Country </b>
+                </span>
+                {otherUserInfor.country ? (
+                    <span>{otherUserInfor.country}</span>
+                ) : ""}
+            </div>
+
             <div className="info">
                 <span>
                     <b>Live in </b>
                 </span>
-                {profileUser.livesin ? (
-                    <span>{profileUser.livesin}</span>
+                {otherUserInfor.livesin ? (
+                    <span>{otherUserInfor.livesin}</span>
                 ) : ""}
             </div>
             <div className="info">
                 <span>
                     <b>Works at </b>
                 </span>
-                {profileUser.workAt ? (
-                    <span>{profileUser.workAt}</span>
+                {otherUserInfor.workAt ? (
+                    <span>{otherUserInfor.workAt}</span>
                 ) : ""}
             </div>
         </div>
