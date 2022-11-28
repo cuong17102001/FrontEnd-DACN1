@@ -12,9 +12,9 @@ import { logOut } from '../../actions/AuthAction'
 import { Link } from 'react-router-dom'
 
 export const RightSide = () => {
-  const [modalOpened , setModalOpened] = useState(false);
+  const [modalOpened, setModalOpened] = useState(false);
   const dispatch = useDispatch();
-  const handleLogOut = ()=>{
+  const handleLogOut = () => {
     if (window.confirm("You want to logout?")) {
       dispatch(logOut())
     }
@@ -22,17 +22,19 @@ export const RightSide = () => {
   return (
     <div className="RightSide">
       <div className="navIcons">
-        <Link style={{width :"1.5rem" , height:"1.5rem"}} to="/home">
-        <img style={{width: "100%" , height:"100%"}} src={Home} alt=""/>
+        <Link style={{ width: "1.5rem", height: "1.5rem" }} to="/home">
+          <img style={{ width: "100%", height: "100%" }} src={Home} alt="" />
         </Link>
-        <UilSetting style={{cursor:"pointer"}}/>
-        <UilMessage style={{cursor:"pointer"}}/>
-        <UilSignout style={{cursor:"pointer"}} onClick={handleLogOut}/>
+        <UilSetting style={{ cursor: "pointer" }} />
+        <Link to="/chat">
+          <UilMessage style={{ cursor: "pointer" }} />
+        </Link>
+        <UilSignout style={{ cursor: "pointer" }} onClick={handleLogOut} />
       </div>
 
       <TrendCard />
 
-      <button className='button r-button'onClick={()=>setModalOpened(true)}>
+      <button className='button r-button' onClick={() => setModalOpened(true)}>
         Share
       </button>
       <ShareModal modalOpened={modalOpened} setModalOpened={setModalOpened} />

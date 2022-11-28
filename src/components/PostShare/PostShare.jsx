@@ -8,13 +8,17 @@ import { UilSchedule } from "@iconscout/react-unicons"
 import { UilTimes } from "@iconscout/react-unicons"
 import { useDispatch, useSelector } from 'react-redux'
 import { uploadImage , uploadPost } from '../../actions/UploadAction'
+import axios from 'axios'
 import userInfoStore from '../../store'
 
 const PostShare = (props) => {
-    const loading = useSelector((state) => state.postReducer.uploading)
+    // const loading = false
+    const loading = useSelector((state) => state.postReducer.loading)
     const [image , setImage] = useState(null)
     const {user} = useSelector((state) => state.authReducer.authData)
     const desc = useRef()
+
+    const addPosts = userInfoStore((state) => state.addPosts)
 
     const imageRef = useRef()
     const dispatch = useDispatch()
@@ -52,7 +56,12 @@ const PostShare = (props) => {
                 console.log(error);
             }
         }
-        dispatch(uploadPost(newPost))
+        axios.post(process.env.REACT_APP_API_URL + `/post`,newPost)
+            .then(res => {
+                addPosts(res.data)
+            })
+        .catch(error => console.log(error));
+        
         reset()
     }
     const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER

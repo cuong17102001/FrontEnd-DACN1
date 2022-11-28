@@ -16,7 +16,7 @@ export const ProfileCard = ({ location }) => {
     const userInfo = userInfoStore((state) => state.userInfo)
     const posts = userInfoStore((state) => state.posts)
     
-
+    console.log(otherUserInfor);
     return (
         <div className="ProfileCard">
             <div className="ProfileImages">
