@@ -1,24 +1,56 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Chating.css'
 import LogoSearch from "../../components/LogoSearch/LogoSearch"
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import Coversation from '../../components/Coversation/Coversation'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { UilMessage } from '@iconscout/react-unicons'
 import { UilSetting } from '@iconscout/react-unicons'
 import { UilSignout } from '@iconscout/react-unicons'
 import Home from '../../img/home.png'
 import { logOut } from '../../actions/AuthAction'
 import ChatBox from '../../components/ChatBox/ChatBox'
+import { io } from 'socket.io-client'
 
 const Chating = () => {
   const { user } = useSelector((state) => state.authReducer.authData)
   const [chats, setChats] = useState([])
   const dispatch = useDispatch()
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
+  const socket = useRef()
+  const { id } = useParams()
+
+
+  useEffect(() => {
+    socket.current = io("https://socketio-chating.onrender.com");
+    socket.current.emit("new-user-add", user._id);
+    socket.current.on("get-users", (users) => {
+      setOnlineUsers(users);
+    });
+  }, [user])
+
+
+  // Send Message to socket server
+  useEffect(() => {
+    if (sendMessage !== null) {
+      socket.current.emit("send-message", sendMessage);
+    }
+  }, [sendMessage]);
+
+
+  useEffect(() => {
+    chats.map((chat) => {
+      if (chat.members.includes(id)) {
+        setCurrentChat(chat)
+        console.log(chat);
+      }
+    })
+  }, [id])
+
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + '/chat/' + user._id)
       .then(function (response) {
@@ -28,12 +60,20 @@ const Chating = () => {
         // handle error
         console.log(error);
       })
-  }, [user])
+  }, [id])
   const handleLogOut = () => {
     if (window.confirm("You want to logout?")) {
       dispatch(logOut())
     }
   }
+  // Get the message from socket server
+  useEffect(() => {
+    socket.current.on("recieve-message", (data) => {
+      setReceivedMessage(data);
+    }
+
+    );
+  }, []);
   return (
     <div className='Chat'>
       <div className='Left-side-chat'>
@@ -42,7 +82,7 @@ const Chating = () => {
           <h2>Chats</h2>
           <div className="Chat-list">
             {chats.map((chat) => (
-              <div onClick={()=>setCurrentChat(chat)}>
+              <div onClick={() => { setCurrentChat(chat); }}>
                 <Coversation
                   data={chat}
                   currentUser={user._id}
@@ -65,14 +105,14 @@ const Chating = () => {
             </Link>
             <UilSignout style={{ cursor: "pointer" }} onClick={handleLogOut} />
           </div>
-         
+
         </div>
         <ChatBox
-            chat={currentChat}
-            currentUser={user._id}
-            setSendMessage={setSendMessage}
-            receivedMessage={receivedMessage}
-          />
+          chat={currentChat}
+          currentUser={user._id}
+          setSendMessage={setSendMessage}
+          receivedMessage={receivedMessage}
+        />
       </div>
     </div>
   )

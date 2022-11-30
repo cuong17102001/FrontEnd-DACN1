@@ -29,7 +29,7 @@ export const Profile = () => {
         setPosts(res.data)
       })
       .catch(error => console.log(error));
-  }, [loadPage])
+  }, [id])
 
   return (
     <div className="Profile">

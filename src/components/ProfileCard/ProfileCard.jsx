@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux'
 import Cover from '../../img/default.jpg'
 import Profile from '../../img/default.png'
 import './ProfileCard.css'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from "axios"
 import userInfoStore from '../../store'
+import message from '../../img/message.png'
 
 export const ProfileCard = ({ location }) => {
 
@@ -15,12 +16,32 @@ export const ProfileCard = ({ location }) => {
     const otherUserInfor = userInfoStore((state) => state.otherUserInfor)
     const userInfo = userInfoStore((state) => state.userInfo)
     const posts = userInfoStore((state) => state.posts)
-    
-    console.log(otherUserInfor);
+
+    let navigate = useNavigate();
+
+    const { id } = useParams()
+
+    const handleInbox = () => {
+        axios.post(`${process.env.REACT_APP_API_URL}/chat`, {
+            senderId: user._id,
+            receiverId: id
+        })
+            .then(function (response) {
+                let path = `/chat/${id}`;
+                navigate(path);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+
+
+    }
+
     return (
         <div className="ProfileCard">
             <div className="ProfileImages">
-                <img src={location === "homePage" ? userInfo.coverPicture ? publicFolder + userInfo.coverPicture : Cover:
+                <img src={location === "homePage" ? userInfo.coverPicture ? publicFolder + userInfo.coverPicture : Cover :
                     otherUserInfor.coverPicture ? publicFolder + otherUserInfor.coverPicture : Cover} alt='' />
                 <img src={location === "homePage" ? userInfo.profilePicture ? publicFolder + userInfo.profilePicture : Profile :
                     otherUserInfor.profilePicture ? publicFolder + otherUserInfor.profilePicture : Profile} alt='' />
@@ -28,6 +49,9 @@ export const ProfileCard = ({ location }) => {
             <div className="ProfileName">
                 <span>{location === "homePage" ? userInfo.firstname : otherUserInfor.firstname} {location === "homePage" ? userInfo.lastname : otherUserInfor.lastname}</span>
                 <span>{location === "homePage" ? userInfo.workAt ? userInfo.workAt : "Write about yourself" : otherUserInfor.workAt ? otherUserInfor.workAt : "Write about yourself"}</span>
+
+                {id && user._id !== otherUserInfor._id ? <img style={{width : 20 , height : 20 , cursor : "pointer"}} src={message} onClick={handleInbox} /> : <></>}
+
             </div>
             <div className="FollowStatus">
                 <hr />
