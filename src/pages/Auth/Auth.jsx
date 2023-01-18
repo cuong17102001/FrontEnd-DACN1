@@ -47,7 +47,7 @@ export const Auth = () => {
             <div className="a-left">
                 <img src={Logo} alt="" />
                 <div className="Webname">
-                    <h1>Media</h1>
+                    <h1>Pearl</h1>
                     <h6>Explore the ideas</h6>
                 </div>
             </div>

@@ -49,6 +49,7 @@ const PostShare = (props) => {
 
             data.append('name' , filename)
             data.append('file' , image)
+
             newPost.image = filename
             try {
                 dispatch(uploadImage(data))
